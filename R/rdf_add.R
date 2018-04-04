@@ -9,7 +9,7 @@
 #' @param subjectType the Node type of the subject, i.e. "uri", "blank"
 #' @param objectType the Node type of the object, i.e. "literal", "uri", "blank"
 #' @param datatype_uri the datatype URI to associate with a object literal value
-#'
+#' @param language the two-character language identifer, en, fr, etc. 
 #' @return Silently returns the updated RDF graph (rdf object).
 #' Since the rdf object simply contains external pointers
 #' to the model object in C code, note that the input object is modified
@@ -39,9 +39,10 @@
 #' @examples
 #' rdf <- rdf()
 #' rdf_add(rdf, 
-#'     subject="http://www.dajobe.org/",
-#'     predicate="http://purl.org/dc/elements/1.1/language",
-#'     object="en")
+#'     subject="",
+#'     predicate="http://schema.org/name", 
+#'     object="Jean-Pierre Rampal",
+#'     language="fr")
 #'     
 #' ## non-URI string in subject indicates a blank subject
 #' ## (prefixes to "_:b0")
@@ -53,7 +54,8 @@
 #'         subjectType = "blank") 
 #'         
 #' ## blank node with empty string creates a default blank node id
-#' rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor")   
+#' ## object types follow R types
+#' rdf_add(rdf, "", "http://schema.org/wordCount", 30L)   
 #'                     
 #' 
 #' ## Subject and Object both recognized as URI resources:
@@ -73,7 +75,8 @@
 rdf_add <- function(rdf, subject, predicate, object, 
                     subjectType = as.character(NA), 
                     objectType = as.character(NA), 
-                    datatype_uri = as.character(NA)){
+                    datatype_uri = as.character(NA),
+                    language = as.character(NA)){
   
 
   ## determine appropriate datatype URI in standard XSD Namespace 
@@ -92,9 +95,15 @@ rdf_add <- function(rdf, subject, predicate, object,
   }
 
   
-  stmt <- new("Statement", world = rdf$world, 
-              subject, predicate, as.character(object),
-              subjectType, objectType, datatype_uri)
+  stmt <- new("Statement", 
+              world = rdf$world, 
+              subject = subject, 
+              predicate = predicate, 
+              object = as.character(object),
+              subjectType, 
+              objectType, 
+              datatype_uri = datatype_uri,
+              language = language)
   redland::addStatement(rdf$model, stmt)
   
   redland::freeStatement(stmt)

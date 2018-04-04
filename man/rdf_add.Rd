@@ -5,7 +5,8 @@
 \title{Add RDF Triples}
 \usage{
 rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
-  objectType = as.character(NA), datatype_uri = as.character(NA))
+  objectType = as.character(NA), datatype_uri = as.character(NA),
+  language = as.character(NA))
 }
 \arguments{
 \item{rdf}{an rdf object}
@@ -21,6 +22,8 @@ rdf_add(rdf, subject, predicate, object, subjectType = as.character(NA),
 \item{objectType}{the Node type of the object, i.e. "literal", "uri", "blank"}
 
 \item{datatype_uri}{the datatype URI to associate with a object literal value}
+
+\item{language}{the two-character language identifer, en, fr, etc.}
 }
 \value{
 Silently returns the updated RDF graph (rdf object).
@@ -49,9 +52,10 @@ or object  See examples for details.
 \examples{
 rdf <- rdf()
 rdf_add(rdf, 
-    subject="http://www.dajobe.org/",
-    predicate="http://purl.org/dc/elements/1.1/language",
-    object="en")
+    subject="",
+    predicate="http://schema.org/name", 
+    object="Jean-Pierre Rampal",
+    language="fr")
     
 ## non-URI string in subject indicates a blank subject
 ## (prefixes to "_:b0")
@@ -63,7 +67,8 @@ rdf_add(rdf, "b0", "http://schema.org/jobTitle", "Professor",
         subjectType = "blank") 
         
 ## blank node with empty string creates a default blank node id
-rdf_add(rdf, "", "http://schema.org/jobTitle", "Professor")   
+## object types follow R types
+rdf_add(rdf, "", "http://schema.org/wordCount", 30L)   
                     
 
 ## Subject and Object both recognized as URI resources:
