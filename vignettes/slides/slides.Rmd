@@ -29,10 +29,10 @@ library(dplyr)
 library(tidyr)
 library(rdflib)
 library(jsonlite)
+library(tibble)
   options(max.print = 50)
-mtcars <- mtcars %>% rownames_to_column("Model")
+mtcars <- mtcars %>% tibble::rownames_to_column("Model")
 
-source(system.file("examples/as_rdf.R", package="rdflib"))
 source(system.file("examples/tidy_schema.R", package="rdflib"))
 ```
 
@@ -207,7 +207,7 @@ class: left, middle, inverse
 # Subject, Predicate, Object
 
 ```{r echo=FALSE}
-rdf_ex <- as_rdf(mtcars, vocab = "mtcars:")
+rdf_ex <- as_rdf(mtcars, prefix = "mtcars:")
 rdf_ex
 ```
 
